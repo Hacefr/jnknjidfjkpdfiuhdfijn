@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eaglercraft 1.12.2 Portal</title>
+    <title>fjffjri39i9r</title>
     <style>
         /* GitHub Dark Mode Theme */
         body {
@@ -28,6 +28,19 @@
         }
 
         h1 { font-size: 24px; margin-bottom: 8px; color: #f0f6fc; }
+        
+        /* Disclaimer Styling */
+        .disclaimer {
+            background-color: rgba(56, 139, 253, 0.1);
+            border: 1px solid rgba(56, 139, 253, 0.4);
+            color: #58a6ff;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
         p { font-size: 14px; color: #8b949e; margin-bottom: 30px; }
 
         .section {
@@ -38,7 +51,6 @@
             gap: 10px;
         }
 
-        /* Button Styling */
         .btn {
             display: inline-block;
             text-decoration: none;
@@ -53,18 +65,14 @@
             text-align: center;
         }
 
-        /* Green Button */
         .btn-primary { background-color: #238636; color: #fff; border-color: rgba(240,246,252,0.1); }
         .btn-primary:hover { background-color: #2ea043; }
 
-        /* Gray Button */
         .btn-secondary { background-color: #21262d; color: #c9d1d9; border-color: #30363d; }
         .btn-secondary:hover { background-color: #30363d; border-color: #8b949e; }
 
-        /* Hidden File Input */
         input[type="file"] { display: none; }
 
-        /* Cloak Link Styling */
         .label-cloak {
             color: #58a6ff;
             font-size: 12px;
@@ -78,6 +86,11 @@
 
     <div class="container">
         <h1>Eaglercraft 1.12.2</h1>
+        
+        <div class="disclaimer">
+            <strong>Note:</strong> Tuff Client is better optimized, offers better performance overall, and is the preferred version for players.
+        </div>
+
         <p>Download your client, then upload to play cloaked.</p>
         
         <!-- Tuff Client Section -->
@@ -102,11 +115,9 @@
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Use a blob to handle the long code string efficiently
                 const blob = new Blob([e.target.result], { type: 'text/html' });
                 const blobUrl = URL.createObjectURL(blob);
                 
-                // Open new tab and inject the file via iframe
                 const win = window.open();
                 if (!win) {
                     alert("Please allow popups for the cloaked tab!");
@@ -125,7 +136,7 @@
                 
                 win.document.body.appendChild(iframe);
             };
-            reader.readAsText(file);
+            reader.readAsArrayBuffer(file);
         }
     </script>
 
