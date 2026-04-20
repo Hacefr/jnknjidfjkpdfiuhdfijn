@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eaglercraft 1.12.2 Downloads</title>
+    <title>Eaglercraft 1.12.2 Portal</title>
     <style>
+        /* GitHub Dark Mode Theme */
         body {
             background-color: #0d1117;
             color: #c9d1d9;
@@ -33,10 +34,11 @@
             margin-bottom: 25px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* GitHub Buttons */
+        /* Button Styling */
         .btn {
             display: inline-block;
             text-decoration: none;
@@ -47,61 +49,83 @@
             transition: 0.2s;
             cursor: pointer;
             border: 1px solid;
+            width: 80%;
+            text-align: center;
         }
 
+        /* Green Button */
         .btn-primary { background-color: #238636; color: #fff; border-color: rgba(240,246,252,0.1); }
         .btn-primary:hover { background-color: #2ea043; }
 
+        /* Gray Button */
         .btn-secondary { background-color: #21262d; color: #c9d1d9; border-color: #30363d; }
         .btn-secondary:hover { background-color: #30363d; border-color: #8b949e; }
 
-        .btn-cloak {
-            background: none;
-            border: none;
+        /* Hidden File Input */
+        input[type="file"] { display: none; }
+
+        /* Cloak Link Styling */
+        .label-cloak {
             color: #58a6ff;
             font-size: 12px;
             text-decoration: underline;
-            padding: 0;
-            margin-top: 4px;
+            cursor: pointer;
         }
-        .btn-cloak:hover { color: #79c0ff; }
+        .label-cloak:hover { color: #79c0ff; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Eaglercraft 1.12.2</h1>
-        <p>Select a version to download or play.</p>
+        <p>Download your client, then upload to play cloaked.</p>
         
         <!-- Tuff Client Section -->
         <div class="section">
-            <a href="" class="btn btn-primary" download>Download Tuff Client</a>
-            <button class="btn-cloak" onclick="openCloaked('')">Open Tuff Client (about:blank)</button>
+            <a href="https://dropbox.com" class="btn btn-primary">1. Download Tuff Client</a>
+            <label for="tuff-upload" class="label-cloak">2. Upload & Play Cloaked (about:blank)</label>
+            <input type="file" id="tuff-upload" accept=".html" onchange="handleFileUpload(this)">
         </div>
         
         <!-- Normal WASM Section -->
         <div class="section">
-            <a href="" class="btn btn-secondary" download>Download Normal WASM</a>
-            <button class="btn-cloak" onclick="openCloaked('')">Open Normal WASM (about:blank)</button>
+            <a href="https://dropbox.com" class="btn btn-secondary">1. Download Normal WASM</a>
+            <label for="wasm-upload" class="label-cloak">2. Upload & Play Cloaked (about:blank)</label>
+            <input type="file" id="wasm-upload" accept=".html" onchange="handleFileUpload(this)">
         </div>
     </div>
 
     <script>
-        function openCloaked(url) {
-            if (!url) {
-                alert("Please add the file URL in the code first!");
-                return;
-            }
-            var win = window.open();
-            win.document.body.style.margin = '0';
-            win.document.body.style.height = '100vh';
-            var iframe = win.document.createElement('iframe');
-            iframe.style.border = 'none';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.margin = '0';
-            iframe.src = url;
-            win.document.body.appendChild(iframe);
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Use a blob to handle the long code string efficiently
+                const blob = new Blob([e.target.result], { type: 'text/html' });
+                const blobUrl = URL.createObjectURL(blob);
+                
+                // Open new tab and inject the file via iframe
+                const win = window.open();
+                if (!win) {
+                    alert("Please allow popups for the cloaked tab!");
+                    return;
+                }
+                
+                win.document.body.style.margin = '0';
+                win.document.body.style.height = '100vh';
+                win.document.body.style.overflow = 'hidden';
+                
+                const iframe = win.document.createElement('iframe');
+                iframe.style.border = 'none';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.src = blobUrl;
+                
+                win.document.body.appendChild(iframe);
+            };
+            reader.readAsText(file);
         }
     </script>
 
