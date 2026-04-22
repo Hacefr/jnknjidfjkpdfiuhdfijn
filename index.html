@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -138,24 +138,23 @@
             <div class="faq-item">
                 <span class="faq-question">How do I fix "Pop-ups blocked"?</span>
                 <div class="faq-answer">
-                    1. Look at the right side of your address bar.<br>
-                    2. Click the icon that looks like a window with a red 'X'.<br>
-                    3. Select <strong>"Always allow popups"</strong> and click Done.<br>
-                    4. <strong>Reload this page</strong> and try uploading again.
+                    1. Click the <strong>blocked icon</strong> in the right of your address bar.<br>
+                    2. Select <strong>"Always allow popups"</strong> and click Done.<br>
+                    3. <strong>Reload this page</strong> and try again.
                 </div>
             </div>
 
             <div class="faq-item">
                 <span class="faq-question">How do I join the server?</span>
                 <div class="faq-answer">
-                    Once the cloaked tab opens, go to <strong>Multiplayer</strong> > <strong>Add Server</strong> and enter IP: <span class="code-inline">wss://your-server-ip-here</span>
+                    In the game, go to <strong>Multiplayer</strong> > <strong>Add Server</strong> and use IP: <span class="code-inline">wss://your-server-ip-here</span>
                 </div>
             </div>
 
             <div class="faq-item">
                 <span class="faq-question">Why use "Play Cloaked"?</span>
                 <div class="faq-answer">
-                    It runs the game in an <code class="code-inline">about:blank</code> tab, which helps hide the page title and icon from history or monitoring tools.
+                    It runs the game in an <code class="code-inline">about:blank</code> tab, which helps hide the page title and icon from browser history.
                 </div>
             </div>
         </div>
@@ -170,15 +169,16 @@
             reader.onload = function(e) {
                 const htmlContent = e.target.result;
                 
-                // Open new window (Pop-ups must be enabled)
                 const win = window.open('about:blank', '_blank');
                 if (!win) {
-                    alert("Pop-up blocked! Please check your address bar, click 'Always Allow', and RELOAD this page.");
+                    alert("Pop-up blocked! Please allow popups in your address bar and RELOAD this page.");
                     return;
                 }
                 
-                // Writing content directly to ensure no white screen
-                win.document.open();
+                // Clear any existing content in the new window
+                win.document.open('text/html');
+                
+                // Write the full document structure to ensure it is parsed as HTML
                 win.document.write(`
                     <!DOCTYPE html>
                     <html>
@@ -191,16 +191,17 @@
                     </head>
                     <body>
                         <iframe id="gameFrame" src="about:blank"></iframe>
-                        <script>
-                            const frame = document.getElementById('gameFrame');
-                            const doc = frame.contentDocument || frame.contentWindow.document;
-                            doc.open();
-                            doc.write(${JSON.stringify(htmlContent)});
-                            doc.close();
-                        <\/script>
                     </body>
                     </html>
                 `);
+
+                // Use the iframe's internal document to inject the game code
+                const frame = win.document.getElementById('gameFrame');
+                const doc = frame.contentDocument || frame.contentWindow.document;
+                doc.open();
+                doc.write(htmlContent);
+                doc.close();
+                
                 win.document.close();
             };
             reader.readAsText(files[0]);
