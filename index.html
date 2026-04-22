@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fjffjri39i9r</title>
+    <title>Eaglercraft 1.12.2</title>
     <style>
         /* GitHub Dark Mode Theme */
         body {
@@ -13,8 +13,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .container {
@@ -29,7 +31,6 @@
 
         h1 { font-size: 24px; margin-bottom: 8px; color: #f0f6fc; }
         
-        /* Disclaimer Styling */
         .disclaimer {
             background-color: rgba(56, 139, 253, 0.1);
             border: 1px solid rgba(56, 139, 253, 0.4);
@@ -80,6 +81,34 @@
             cursor: pointer;
         }
         .label-cloak:hover { color: #79c0ff; }
+
+        /* FAQ Styling */
+        .faq-section {
+            margin-top: 30px;
+            text-align: left;
+            border-top: 1px solid #30363d;
+            padding-top: 20px;
+        }
+        .faq-item { margin-bottom: 15px; }
+        .faq-question {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f0f6fc;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .faq-answer {
+            font-size: 13px;
+            color: #8b949e;
+            line-height: 1.5;
+        }
+        .code-inline {
+            background: #21262d;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #ff7b72;
+        }
     </style>
 </head>
 <body>
@@ -88,55 +117,93 @@
         <h1>Eaglercraft 1.12.2</h1>
         
         <div class="disclaimer">
-            <strong>Note:</strong> Tuff Client is better optimized, offers better performance overall, and is the preferred version for players.
+            <strong>Note:</strong> Tuff Client is better optimized and is the preferred version for performance.
         </div>
 
         <p>Download your client, then upload to play cloaked.</p>
         
-        <!-- Tuff Client Section -->
         <div class="section">
-            <a href="https://www.dropbox.com/scl/fi/68l0c63pxlee5y9xkdjlk/TuffClient_WASM_Offline.html?rlkey=kd11g1aefn5j9p5d8eoepx5wc&st=249iah1t&dl=0">1. Download Tuff Client</a>
+            <a href="https://dropbox.com" class="btn btn-primary">1. Download Tuff Client</a>
             <label for="tuff-upload" class="label-cloak">2. Upload & Play Cloaked (about:blank)</label>
             <input type="file" id="tuff-upload" accept=".html" onchange="handleFileUpload(this)">
         </div>
         
-        <!-- Normal WASM Section -->
         <div class="section">
-            <a href="https://www.dropbox.com/scl/fi/52sx1m705i72zf1zl4eyr/Eaglercraft_1.12.2_WASM_Offline_Download.html?rlkey=qpych9fzkt3tmorhenwn0yeq8&st=9qtu776o&dl=0" class="btn btn-secondary">1. Download Normal WASM</a>
+            <a href="https://dropbox.com" class="btn btn-secondary">1. Download Normal WASM</a>
             <label for="wasm-upload" class="label-cloak">2. Upload & Play Cloaked (about:blank)</label>
             <input type="file" id="wasm-upload" accept=".html" onchange="handleFileUpload(this)">
+        </div>
+
+        <div class="faq-section">
+            <div class="faq-item">
+                <span class="faq-question">How do I fix "Pop-ups blocked"?</span>
+                <div class="faq-answer">
+                    1. Look at the right side of your address bar.<br>
+                    2. Click the icon that looks like a window with a red 'X'.<br>
+                    3. Select <strong>"Always allow popups"</strong> and click Done.<br>
+                    4. <strong>Reload this page</strong> and try uploading again.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <span class="faq-question">How do I join the server?</span>
+                <div class="faq-answer">
+                    Once the cloaked tab opens, go to <strong>Multiplayer</strong> > <strong>Add Server</strong> and enter IP: <span class="code-inline">wss://your-server-ip-here</span>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <span class="faq-question">Why use "Play Cloaked"?</span>
+                <div class="faq-answer">
+                    It runs the game in an <code class="code-inline">about:blank</code> tab, which helps hide the page title and icon from history or monitoring tools.
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         function handleFileUpload(input) {
-            const file = input.files[0];
-            if (!file) return;
+            const files = input.files;
+            if (!files || files.length === 0) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const blob = new Blob([e.target.result], { type: 'text/html' });
-                const blobUrl = URL.createObjectURL(blob);
+                const htmlContent = e.target.result;
                 
-                const win = window.open();
+                // Open new window (Pop-ups must be enabled)
+                const win = window.open('about:blank', '_blank');
                 if (!win) {
-                    alert("Please allow popups for the cloaked tab!");
+                    alert("Pop-up blocked! Please check your address bar, click 'Always Allow', and RELOAD this page.");
                     return;
                 }
                 
-                win.document.body.style.margin = '0';
-                win.document.body.style.height = '100vh';
-                win.document.body.style.overflow = 'hidden';
-                
-                const iframe = win.document.createElement('iframe');
-                iframe.style.border = 'none';
-                iframe.style.width = '100%';
-                iframe.style.height = '100%';
-                iframe.src = blobUrl;
-                
-                win.document.body.appendChild(iframe);
+                // Writing content directly to ensure no white screen
+                win.document.open();
+                win.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Google Docs</title>
+                        <style>
+                            body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+                            iframe { border: none; width: 100%; height: 100%; }
+                        </style>
+                    </head>
+                    <body>
+                        <iframe id="gameFrame" src="about:blank"></iframe>
+                        <script>
+                            const frame = document.getElementById('gameFrame');
+                            const doc = frame.contentDocument || frame.contentWindow.document;
+                            doc.open();
+                            doc.write(${JSON.stringify(htmlContent)});
+                            doc.close();
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
             };
-            reader.readAsArrayBuffer(file);
+            reader.readAsText(files[0]);
         }
     </script>
 
